@@ -229,6 +229,9 @@ function main()
                 end
             end
         end
+
+        textLabelOverPlayerNickname()
+        
     end
 end
 
