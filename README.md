@@ -12,7 +12,7 @@
 
 ## Скачать скрипт и все необходимые библиотеки
 
-- [SRPfunctions.lua + lib(перекинуть в папку moonloader)](https://github.com/WebbLua/HitmanHelper/archive/refs/heads/main.zip)
+- [HitmanHelper.lua - САМАЯ АКТУАЛЬНАЯ ВЕРСИЯ ТУТ](https://github.com/WebbLua/HitmanHelper/archive/refs/heads/main.zip)
 - [CLEO 4](https://cleo.li)
 - [SAMPFUNCS v5.4.1](https://www.blast.hk/threads/17/)
 - [Moonloader v026.5](https://www.blast.hk/threads/13305/)
