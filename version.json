@@ -1,6 +1,6 @@
 {
-	"version": 1,
-	"date": "14.06.2023",
+	"version": 2,
+	"date": "17.06.2023",
 	"url": "https://raw.githubusercontent.com/WebbLua/HitmanHelper/main/HitmanHelper.lua",
 	"label": "https://raw.githubusercontent.com/WebbLua/TextLabels/main/TextLabels.json",
 	"telegram": {
