@@ -191,7 +191,7 @@ function main()
                         local msx, msy = convert3DCoordsToScreen(mx, my, mz)
                         local d = getDistanceBetweenCoords3d(mx, my, mz, x, y, z)
                         local distance = string.format("%.1f", d)
-                        local clist = sampGetPlayerColor(id)
+                        local clist = sampGetPlayerColor(current.id)
                         local a, r, g, b = explode_argb(clist)
                         local color = join_argb(230.0, r, g, b)
                         local camMode = readMemory(0xB6F1A8, 1, false)
@@ -699,6 +699,12 @@ end
 function onScriptTerminate(s, bool)
     if s == thisScript() and not bool then
         imgui.Process = false
+        for i = 0, 1000 do
+            if textlabel[i] ~= nil then
+                sampDestroy3dText(textlabel[i])
+                textlabel[i] = nil
+            end
+        end
         if not script.update then
             if not script.unload then
                 script.sendMessage(error_prefix ..
