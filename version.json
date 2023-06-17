@@ -2,7 +2,7 @@
 	"version": 1,
 	"date": "14.06.2023",
 	"url": "https://raw.githubusercontent.com/WebbLua/HitmanHelper/main/HitmanHelper.lua",
-	"author": "Cody_Webb",
+	"label": "https://raw.githubusercontent.com/WebbLua/TextLabels/main/TextLabels.json",
 	"telegram": {
 		"nick": "@ibm287",
 		"url": "https://t.me/ibm287"
