@@ -1,7 +1,7 @@
 script_name('HitmanHelper')
 script_author("Webb")
-script_version("17.06.2023")
-script_version_number(2)
+script_version("19.06.2023")
+script_version_number(3)
 
 local main_color, main_color_hex = 0xB8B6B6, "{B8B6B6}"
 local prefix, updating_prefix, error_prefix = "{B8B6B6}[HitMan]{FFFAFA} ", "{FF0000}[UPDATING]{FFFAFA} ",
@@ -185,7 +185,7 @@ function main()
                 local result, handle = sampGetCharHandleBySampPlayerId(current.id)
                 if result then
                     if doesCharExist(handle) and isCharOnScreen(handle) then
-                        local x, y, z = getBodyPartCoordinates(3, handle)
+                        local x, y, z = getBodyPartCoordinates(8, handle)
                         local sx, sy = convert3DCoordsToScreen(x, y, z)
                         local mx, my, mz = getCharCoordinates(PLAYER_PED)
                         local msx, msy = convert3DCoordsToScreen(mx, my, mz)
@@ -199,7 +199,7 @@ function main()
                             true, true)
                         if (camMode == 53 or camMode == 55 or camMode == 7 or camMode == 8) and not collision and
                             not isKeyDown(vkeys.VK_LSHIFT) then
-                            targetAtCoords(x, y, (isCharInAnyCar(handle) and z + 0.3 or z))
+                            targetAtCoords(x, y, z)
                         end
                         local dcolor = getCurrentCharWeapon(PLAYER_PED) == 34 and
                                            (d <= 100 and "{0af775}" or "{8b0000}TOO FAR ") or ""
