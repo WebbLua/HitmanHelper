@@ -1,7 +1,7 @@
 script_name('HitmanHelper')
 script_author("Webb")
-script_version("19.06.2023")
-script_version_number(3)
+script_version("23.06.2023")
+script_version_number(4)
 
 local main_color, main_color_hex = 0xB8B6B6, "{B8B6B6}"
 local prefix, updating_prefix, error_prefix = "{B8B6B6}[HitMan]{FFFAFA} ", "{FF0000}[UPDATING]{FFFAFA} ",
@@ -101,6 +101,8 @@ local msg = {
     }
 }
 
+local servers = {"Underground", "Revolution", "Legacy"}
+
 function main()
     if not isSampLoaded() or not isSampfuncsLoaded() then
         return
@@ -112,16 +114,14 @@ function main()
     while sampGetCurrentServerName() == "SA-MP" do
         wait(0)
     end
-    server = sampGetCurrentServerName():gsub('|', '')
-    server = (server:find('02') and 'Two' or (
-        server:find('Revo') and 'Revolution' or (
-            server:find('Legacy') and 'Legacy' or (
-                server:find('Classic') and 'Classic' or 
-                nil
-            )
-        )
-    )
-)
+    
+    local serverName = sampGetCurrentServerName()
+    for k, v in ipairs(servers) do
+        if serverName:find(v) then
+            server = v
+            break
+        end
+    end
     if server == nil then
         script.sendMessage('Данный сервер не поддерживается, выгружаюсь...')
         script.unload = true
