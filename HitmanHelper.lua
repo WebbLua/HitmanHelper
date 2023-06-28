@@ -1,7 +1,7 @@
 script_name('HitmanHelper')
 script_author("Webb")
-script_version("23.06.2023")
-script_version_number(4)
+script_version("28.06.2023")
+script_version_number(5)
 
 local main_color, main_color_hex = 0xB8B6B6, "{B8B6B6}"
 local prefix, updating_prefix, error_prefix = "{B8B6B6}[HitMan]{FFFAFA} ", "{FF0000}[UPDATING]{FFFAFA} ",
@@ -101,7 +101,7 @@ local msg = {
     }
 }
 
-local servers = {"Underground", "Revolution", "Legacy"}
+local servers = {"Under", "Revo", "Legacy"}
 
 function main()
     if not isSampLoaded() or not isSampfuncsLoaded() then
