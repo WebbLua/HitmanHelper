@@ -642,7 +642,7 @@ function hit.checkUpdates() -- проверка обновлений
             hit.sendMessage(updating_prefix .. "Обнаружена новая версия скрипта от " ..
                                    data.date .. ", начинаю обновление...")
             hit.updateScript()
-            return true
+            return
         end
         hit.checkedUpdates = true
     end)
@@ -688,7 +688,7 @@ end
 function hit.updateScript()
     hit.update = true
     downloadUrlToFile(hit.url, thisScript().path, function(_, status, _, _)
-        if status == 6 then
+        if status == dlstatus.STATUS_ENDDOWNLOADDATA then
             hit.sendMessage(updating_prefix .. "Скрипт был обновлён!")
             if script.find("ML-AutoReboot") == nil then
                 thisScript():reload()
