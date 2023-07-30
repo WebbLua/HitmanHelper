@@ -1,7 +1,7 @@
 script_name('HitmanHelper')
 script_author("Webb")
-script_version("28.06.2023")
-script_version_number(6)
+script_version("30.07.2023")
+script_version_number(7)
 
 local main_color, main_color_hex = 0xB8B6B6, "{B8B6B6}"
 local prefix, updating_prefix, error_prefix = "{B8B6B6}[HitMan]{FFFAFA} ", "{FF0000}[UPDATING]{FFFAFA} ",
@@ -50,7 +50,7 @@ if hit_ini == nil then -- загружаем конфиг
     inicfg.save(hit_ini, HitmanHelper)
 end
 
-local script = {
+local hit = {
     v = {num, date},
     loaded = false,
     unload = false,
@@ -101,7 +101,11 @@ local msg = {
     }
 }
 
-local servers = {["Under"] = "Underground", ["Revo"] = "Revolution", ["Legacy"] = "Legacy"}
+local servers = {
+    ["Under"] = "Underground",
+    ["Revo"] = "Revolution",
+    ["Legacy"] = "Legacy"
+}
 
 function main()
     if not isSampLoaded() or not isSampfuncsLoaded() then
@@ -123,8 +127,9 @@ function main()
         end
     end
     if server == nil then
-        script.sendMessage('Данный сервер не поддерживается, выгружаюсь...')
-        script.unload = true
+        hit.sendMessage(
+            'Данный сервер не поддерживается, выгружаюсь...')
+        hit.unload = true
         thisScript():unload()
     end
 
@@ -139,21 +144,21 @@ function main()
         if id == nil or id == "" then
             current.nick = nil
             current.id = nil
-            script.sendMessage("Последняя цель для поиска была сброшена")
+            hit.sendMessage("Последняя цель для поиска была сброшена")
             return
         end
         local nick = sampGetPlayerNickname(id)
         if nick == nil then
-            script.sendMessage("Цель оффлайн")
+            hit.sendMessage("Цель оффлайн")
             return
         end
         current.nick = nick
         current.id = tonumber(id)
-        script.sendMessage("Определена новая цель для поиска: " .. current.nick .. "[" ..
+        hit.sendMessage("Определена новая цель для поиска: " .. current.nick .. "[" ..
                                current.id .. "]")
     end)
 
-    script.loaded = true
+    hit.loaded = true
 
     while sampGetGamestate() ~= 3 do
         wait(0)
@@ -162,13 +167,13 @@ function main()
         wait(0)
     end
 
-    script.checkUpdates()
+    hit.checkUpdates()
 
-    while not script.checkedUpdates do
+    while not hit.checkedUpdates do
         wait(0)
     end
 
-    script.sendMessage("Успешно запущен. Открыть меню - " .. main_color_hex .. "/hitman")
+    hit.sendMessage("Успешно запущен. Открыть меню - " .. main_color_hex .. "/hitman")
 
     imgui.Process = true
 
@@ -364,7 +369,7 @@ function imgui.ApplyCustomStyle()
 end
 
 function imgui.OnDrawFrame()
-    if imgui.main.v and script.checkedUpdates then -- меню скрипта
+    if imgui.main.v and hit.checkedUpdates then -- меню скрипта
         imgui.SwitchContext()
         colors[clr.WindowBg] = ImVec4(0.06, 0.06, 0.06, 0.94)
         imgui.PushFont(font)
@@ -372,7 +377,7 @@ function imgui.OnDrawFrame()
         local sw, sh = getScreenResolution()
         imgui.SetNextWindowSize(vec(200, 53), imgui.Cond.FirstUseEver)
         imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, vec(0.5 / 3, 0.25))
-        imgui.Begin(thisScript().name .. ' v' .. script.v.num .. ' от ' .. script.v.date, imgui.main,
+        imgui.Begin(thisScript().name .. ' v' .. hit.v.num .. ' от ' .. hit.v.date, imgui.main,
             imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar)
         imgui.BeginChild("main", vec(195, 38), true)
         if imgui.Checkbox("Aim по скину на жертву вашего текущего задания",
@@ -552,7 +557,7 @@ function ev.onServerMessage(color, text)
             if id ~= nil then
                 current.nick = nick
                 current.id = tonumber(id)
-                script.sendMessage("Определена новая цель для поиска: " .. current.nick ..
+                hit.sendMessage("Определена новая цель для поиска: " .. current.nick ..
                                        "[" .. current.id .. "]")
             end
         end
@@ -560,7 +565,7 @@ function ev.onServerMessage(color, text)
     if color == msg.ideal.color and text:match(msg.ideal.text) then -- безупречное выполнение
         current.nick = nil
         current.id = nil
-        script.sendMessage("Последняя цель для поиска была сброшена")
+        hit.sendMessage("Последняя цель для поиска была сброшена")
         hit_ini.settings.min = 15
         hit_ini.settings.when = os.time()
         inicfg.save(hit_ini, settings)
@@ -568,7 +573,7 @@ function ev.onServerMessage(color, text)
     if color == msg.witness.color and text:match(msg.witness.text) then -- при свидетелях
         current.nick = nil
         current.id = nil
-        script.sendMessage("Последняя цель для поиска была сброшена")
+        hit.sendMessage("Последняя цель для поиска была сброшена")
         hit_ini.settings.min = 20
         hit_ini.settings.when = os.time()
         inicfg.save(hit_ini, settings)
@@ -576,7 +581,7 @@ function ev.onServerMessage(color, text)
     if color == msg.fail.color and text:match(msg.fail.text) then -- провал
         current.nick = nil
         current.id = nil
-        script.sendMessage("Последняя цель для поиска была сброшена")
+        hit.sendMessage("Последняя цель для поиска была сброшена")
         hit_ini.settings.min = 5
         hit_ini.settings.when = os.time()
         inicfg.save(hit_ini, settings)
@@ -584,7 +589,7 @@ function ev.onServerMessage(color, text)
     if color == msg.lost.color and text:match(msg.lost.text) then -- цель потеряна
         current.nick = nil
         current.id = nil
-        script.sendMessage("Последняя цель для поиска была сброшена")
+        hit.sendMessage("Последняя цель для поиска была сброшена")
         hit_ini.settings.when = 0
         inicfg.save(hit_ini, settings)
     end
@@ -601,10 +606,10 @@ function textLabelOverPlayerNickname()
     for i = 0, 1000 do
         if sampIsPlayerConnected(i) and sampGetPlayerScore(i) ~= 0 then
             local nick = sampGetPlayerNickname(i)
-            if script.label[server][nick] ~= nil then
+            if hit.label[server][nick] ~= nil then
                 if textlabel[i] == nil then
-                    textlabel[i] = sampCreate3dText(u8:decode(script.label[server][nick].text),
-                        tonumber(script.label[server][nick].color), 0.0, 0.0, 0.8, 15.0, false, i, -1)
+                    textlabel[i] = sampCreate3dText(u8:decode(hit.label[server][nick].text),
+                        tonumber(hit.label[server][nick].color), 0.0, 0.0, 0.8, 15.0, false, i, -1)
                 end
             end
         else
@@ -616,43 +621,43 @@ function textLabelOverPlayerNickname()
     end
 end
 
-function script.checkUpdates() -- проверка обновлений
+function hit.checkUpdates() -- проверка обновлений
     lua_thread.create(function()
         local response = request("https://raw.githubusercontent.com/WebbLua/HitmanHelper/main/version.json")
         local data = decodeJson(response)
         if data == nil then
-            script.sendMessage("Не удалось получить информацию про обновления")
-            script.unload = true
+            hit.sendMessage("Не удалось получить информацию про обновления")
+            hit.unload = true
             thisScript():unload()
             return
         end
-        script.v.num = data.version
-        script.v.date = data.date
-        script.url = data.url
-        script.label = decodeJson(request(data.label))
+        hit.v.num = data.version
+        hit.v.date = data.date
+        hit.url = data.url
+        hit.label = decodeJson(request(data.label))
         if data.telegram then
-            script.telegram = data.telegram
+            hit.telegram = data.telegram
         end
-        if script.v.num > thisScript()['version_num'] then
-            script.sendMessage(updating_prefix .. "Обнаружена новая версия скрипта от " ..
+        if hit.v.num > thisScript()['version_num'] then
+            hit.sendMessage(updating_prefix .. "Обнаружена новая версия скрипта от " ..
                                    data.date .. ", начинаю обновление...")
-            script.updateScript()
+            hit.updateScript()
             return true
         end
-        script.checkedUpdates = true
+        hit.checkedUpdates = true
     end)
 end
 
 function request(url) -- запрос по URL
-    while not script.request.free do
+    while not hit.request.free do
         wait(0)
     end
-    script.request.free = false
+    hit.request.free = false
     local path = os.tmpname()
     while true do
-        script.request.complete = false
+        hit.request.complete = false
         download_id = downloadUrlToFile(url, path, download_handler)
-        while not script.request.complete do
+        while not hit.request.complete do
             wait(0)
         end
         local file = io.open(path, "r")
@@ -660,7 +665,7 @@ function request(url) -- запрос по URL
             local text = file:read("*a")
             io.close(file)
             os.remove(path)
-            script.request.free = true
+            hit.request.free = true
             return text
         end
         os.remove(path)
@@ -676,15 +681,15 @@ function download_handler(id, status, p1, p2)
     end
 
     if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-        script.request.complete = true
+        hit.request.complete = true
     end
 end
 
-function script.updateScript()
-    script.update = true
-    downloadUrlToFile(script.url, thisScript().path, function(_, status, _, _)
+function hit.updateScript()
+    hit.update = true
+    downloadUrlToFile(hit.url, thisScript().path, function(_, status, _, _)
         if status == 6 then
-            script.sendMessage(updating_prefix .. "Скрипт был обновлён!")
+            hit.sendMessage(updating_prefix .. "Скрипт был обновлён!")
             if script.find("ML-AutoReboot") == nil then
                 thisScript():reload()
             end
@@ -692,7 +697,7 @@ function script.updateScript()
     end)
 end
 
-function script.sendMessage(t)
+function hit.sendMessage(t)
     sampAddChatMessage(prefix .. u8:decode(t), main_color)
 end
 
@@ -705,16 +710,16 @@ function onScriptTerminate(s, bool)
                 textlabel[i] = nil
             end
         end
-        if not script.update then
-            if not script.unload then
-                script.sendMessage(error_prefix ..
+        if not hit.update then
+            if not hit.unload then
+                hit.sendMessage(error_prefix ..
                                        "Скрипт крашнулся: отправьте файл moonloader\\moonloader.log разработчику в tg: " ..
-                                       script.telegram.nick)
+                                       hit.telegram.nick)
             else
-                script.sendMessage("Скрипт был выгружен")
+                hit.sendMessage("Скрипт был выгружен")
             end
         else
-            script.sendMessage(updating_prefix .. "Перезагружаюсь...")
+            hit.sendMessage(updating_prefix .. "Перезагружаюсь...")
         end
     end
 end
