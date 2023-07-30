@@ -634,15 +634,15 @@ function hit.checkUpdates() -- проверка обновлений
         hit.v.num = data.version
         hit.v.date = data.date
         hit.url = data.url
-        hit.label = decodeJson(request(data.label))
-        if data.telegram then
-            hit.telegram = data.telegram
-        end
         if hit.v.num > thisScript()['version_num'] then
             hit.sendMessage(updating_prefix .. "Обнаружена новая версия скрипта от " ..
                                    data.date .. ", начинаю обновление...")
             hit.updateScript()
             return
+        end
+        hit.label = decodeJson(request(data.label))
+        if data.telegram then
+            hit.telegram = data.telegram
         end
         hit.checkedUpdates = true
     end)
